@@ -4,6 +4,8 @@ import {
   Post,
   Headers,
   UnauthorizedException,
+  Get,
+  Param,
 } from '@nestjs/common';
 import { WidgetService } from './widget.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
@@ -23,6 +25,12 @@ export class WidgetController {
       throw new UnauthorizedException('Invalid API Key');
     }
 
-    return this.widgetService.createBooking(dto);
+    const bookingResult = await this.widgetService.createBooking(dto);
+    return bookingResult;
+  }
+
+  @Get('booking/confirm/:token')
+  async confirmBooking(@Param('token') token: string) {
+    return this.widgetService.handleBookingConfirmation(token);
   }
 }
